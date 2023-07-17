@@ -3,13 +3,10 @@ title: API Reference
 
 language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of-supported-languages-and-lexers
   - shell
-  - ruby
-  - python
-  - javascript
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
+  - <a href='#'>Documentation Powered by A10031</a>
 
 includes:
   - errors
@@ -25,221 +22,195 @@ meta:
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
-
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
-
+Welcome to the Indico Documentation API
 # Authentication
 
 > To authorize, use this code:
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
 
 ```shell
 # With shell, you can just pass the correct header with each request
 curl "api_endpoint_here" \
-  -H "Authorization: meowmeowmeow"
+  -H "x-api-key: api-key-xxxx"
 ```
 
-```javascript
-const kittn = require('kittn');
+> Make sure to replace `api-key-xxxx` with your API key.
 
-let api = kittn.authorize('meowmeowmeow');
-```
+The API Using some credentials, please contact INDICO Tech Team on it !
 
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`x-api-key: api-key-xxxx`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>api-key-xxxx</code> with your personal API key.
 </aside>
 
-# Kittens
+# coda
 
-## Get All Kittens
+## List SKU
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
 
 ```shell
-curl "http://example.com/api/kittens" \
-  -H "Authorization: meowmeowmeow"
+curl "http://example.com/coda/v1" \
+  -H "x-api-key: api-key-xxxx"
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
+> Example Request
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
+{
+  "game_name":"steam-voucher",
+  "service_name":2
+}
 ```
 
-This endpoint retrieves all kittens.
+> Example Response
+
+```json
+{
+  "id": "a138713e-04a0-4e63-9e52-51ed4343709f",
+  "jsonrpc": "2.0",
+  "result": {
+
+    "skuList": [
+      {
+        "description": "Steam Wallet Code IDR1xxxx",
+        "price": {
+          "amount": 12700,
+          "currency": "IDR"
+        },
+        "sku": "STEAMIDR1xxxx"
+      }
+    ]
+  }
+}
+```
+
+This endpoint retrieves list sku
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`POST http://example.com/coda/v1`
 
-### Query Parameters
+### Request Body
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+Parameter | Required | Description
+--------- |----------| -----------
+game_name | true     | the completed name listed on coda sandbox
+service_name | true     | `0.place order` `1.Get Order` `2.list SKU`
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+Remember — List SKU authenticated by AWS Api Key
 </aside>
 
-## Get a Specific Kitten
+## Voucher - Place Order
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
 
 ```shell
-curl "http://example.com/api/kittens/2" \
-  -H "Authorization: meowmeowmeow"
+curl "http://example.com/coda/v1" \
+  -H "x-api-key: api-key-xxxx"
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
+> Example Request
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "game_name": "steam-voucher",
+  "sku": "SKU10001",
+  "amount": 1000,
+  "service_name": 0
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2" \
-  -X DELETE \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
+> Example Response
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "id": "a138713e-04a0-4e63-9e52-51ed4343709f",
+  "jsonrpc": "2.0",
+  "result": {
+    "status": "FULFILLED",
+    "orderId": "1c6cda00-375c-476e-8e1f-6b59ec958632",
+    "items": [
+      {
+        "sku": "SAMPLE-SKU-0U36C",
+        "codes": "test1IDR12k-00495"
+      }
+    ]
+  }
 }
 ```
 
-This endpoint deletes a specific kitten.
+This endpoint to purchase the voucher code by sku
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`POST http://example.com/coda/v1`
 
-### URL Parameters
+### Request Body
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+Parameter | Required | Description
+--------- |----------| -----------
+game_name | true     | the completed name listed on coda sandbox
+sku | true     | provided by coda and available on the List SKU API result
+amount | true | dependent with sku value
+service_name | true     | `0.place order` `1.Get Order` `2.list SKU`
+
+<aside class="success">
+Remember — Get Order authenticated by AWS Api Key
+</aside>
+
+## Voucher - Get Order
+
+
+```shell
+curl "http://example.com/coda/v1" \
+  -H "x-api-key: api-key-xxxx"
+```
+
+> Example Request
+
+```json
+{
+  "game_name": "steam-voucher",
+  "order_id": "r5fga156538iKli688",
+  "service_name": 1
+}
+```
+
+> Example Response
+
+```json
+{
+  "id": "a138713e-04a0-4e63-9e52-51ed4343709f",
+  "jsonrpc": "2.0",
+  "result": {
+    "status": "FULFILLED",
+    "orderId": "1c6cda00-375c-476e-8e1f-6b59ec958632",
+    "voucher": [
+      {
+        "sku": "SAMPLE-SKU-0U36C",
+        "codes": "test1IDR12k-00495"
+      }
+    ]
+  }
+}
+```
+
+This endpoint to get order detail by orderID
+
+### HTTP Request
+
+`POST http://example.com/coda/v1`
+
+### Request Body
+
+Parameter | Required | Description
+--------- |----------| -----------
+game_name | true     | the completed name listed on coda sandbox
+order_id | true     | provided by coda on Place Order API Result
+service_name | true     | `0.place order` `1.Get Order` `2.list SKU`
+
+<aside class="success">
+Remember — Get Order authenticated by AWS Api Key
+</aside>
 
